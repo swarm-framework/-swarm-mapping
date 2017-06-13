@@ -6,9 +6,6 @@ cmake_minimum_required(VERSION 3.8)
 #   * PROJECT_VERSION
 project(swarm-mapping VERSION 0.1.0)
 
-# enable tests
-enable_testing()
-
 # Include config
 include(Config/config.cmake)
 
