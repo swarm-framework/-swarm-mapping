@@ -33,7 +33,6 @@ function(find_dependencies packagName)
             # Set include dir
             set(${packagName}_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Dependencies/${packagName}/Sources" PARENT_SCOPE)
             
-            
         else()
         
             # Find package

@@ -19,10 +19,10 @@ add_library(swarm-mapping
 
 # Add definitions for targets
 # Values:
-#   * Debug: -DSWAM_MAPPING_DEBUG=1
-#   * Release: -DSWAM_MAPPING_DEBUG=0
-#   * other: -DSWAM_MAPPING_DEBUG=0
-target_compile_definitions(swarm-mapping  PUBLIC "SWAM_MAPPING_DEBUG=$<CONFIG:Debug>")
+#   * Debug: -DSWARM_MAPPING_DEBUG=1
+#   * Release: -DSWARM_MAPPING_DEBUG=0
+#   * other: -DSWARM_MAPPING_DEBUG=0
+target_compile_definitions(swarm-mapping  PUBLIC "SWARM_MAPPING_DEBUG=$<CONFIG:Debug>")
 
 # Generate headers:
 include(GenerateExportHeader)
