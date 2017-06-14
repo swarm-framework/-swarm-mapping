@@ -17,3 +17,23 @@
 #ifndef SWARM_MAPPING_DECODERPROVIDER_HXX
 #include "DecoderProvider.hxx"
 #endif
+
+namespace swarm {
+    namespace mapping {
+    
+        // Decode an attribute
+        template<typename T> 
+        std::shared_ptr<T> DecoderProvider::decodeAttribute(const std::string & name) {
+            // FIXME Add log
+            return std::shared_ptr<T>{};
+        }
+        
+        // Decode an element
+        template<typename T> 
+        std::shared_ptr<T> DecoderProvider::decodeElement(const std::string & name) {
+            // FIXME Add log
+            return std::shared_ptr<T>{};
+        }
+            
+    }
+}

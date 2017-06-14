@@ -18,11 +18,26 @@
 #ifndef SWARM_MAPPING_ENCODERPROVIDER_HXX
 #define SWARM_MAPPING_ENCODERPROVIDER_HXX
 
+#include <string>
+
 namespace swarm {
     namespace mapping {
 
         /// \brief Class EncoderProvider
-        class EncoderProvider {};
+        struct EncoderProvider {
+            
+            /// \brief Encode an attribute
+            /// \param name Attribute name
+            /// \param value Attribute value
+            template<typename T>
+            void encodeAttribute(const std::string & name, const T & value);
+            
+            /// \brief Encode an element
+            /// \param name Element name
+            /// \param value Attribute value
+            template<typename T>
+            void encodeElement(const std::string & name, const T & value);
+        };
     }
 }
 

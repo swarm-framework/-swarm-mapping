@@ -18,3 +18,20 @@
 #ifndef SWARM_MAPPING_ENCODERPROVIDER_HXX
 #include "EncoderProvider.hxx"
 #endif
+namespace swarm {
+    namespace mapping {
+        
+        // Encode an attribute
+        template<typename T>
+        void EncoderProvider::encodeAttribute(const std::string & name, const T & value) {
+            // FIXME Log
+        }
+        
+        // Encode an element
+        template<typename T>
+        void EncoderProvider::encodeElement(const std::string & name,const T & value) {
+            // FIXME Log
+            
+        }
+    }
+}

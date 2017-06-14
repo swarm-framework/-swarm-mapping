@@ -11,7 +11,9 @@ add_library(swarm-mapping
     Sources/swarm/mapping/object/ObjectDecoder.hxx Sources/swarm/mapping/object/ObjectDecoder.txx
     
     Sources/swarm/mapping/provider/EncoderProvider.hxx Sources/swarm/mapping/provider/EncoderProvider.txx
+    #Sources/swarm/mapping/provider/EncoderProviderFor.hxx Sources/swarm/mapping/provider/EncoderProviderFor.txx
     Sources/swarm/mapping/provider/DecoderProvider.hxx Sources/swarm/mapping/provider/DecoderProvider.txx
+    #Sources/swarm/mapping/provider/DecoderProviderFor.hxx Sources/swarm/mapping/provider/DecoderProviderFor.txx
     
     Sources/swarm/mapping/provider/json/JSonEncoder.cxx Sources/swarm/mapping/provider/json/JSonEncoder.hxx
     Sources/swarm/mapping/provider/json/JSonDecoder.cxx Sources/swarm/mapping/provider/json/JSonDecoder.hxx

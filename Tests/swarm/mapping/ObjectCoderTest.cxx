@@ -28,12 +28,12 @@ namespace swarm {
             
         };
         
-        class ObjectB {
-            
+        struct ObjectB {
+            int attr1;
         };
         
-        class ObjectC {
-            
+        struct ObjectC {
+            std::string str;
         };
     }
     
@@ -46,14 +46,22 @@ namespace swarm {
             /// \param decoder Decoder used to decode object
             /// \return Object decoded
             std::shared_ptr<test::ObjectB> decode(DecoderProvider & decoder) {
-                return std::shared_ptr<test::ObjectB>{};
+                
+                auto object = std::make_shared<test::ObjectB>();
+                
+                auto attr1 = decoder.decodeElement<int>("attr1");
+                if (attr1) {
+                    object->attr1 = *attr1;
+                }
+                
+                return object;
             }
             
             /// \brief Encode an object using an encoder provider
             /// \param encoder Encoder used to encode object
             /// \param object Object to encode
             void encode(EncoderProvider & encoder, const test::ObjectB & object) {
-                
+                encoder.encodeElement<int>("attr1", object.attr1);
             }
         };
         
@@ -64,7 +72,7 @@ namespace swarm {
             /// \param encoder Encoder used to encode object
             /// \param object Object to encode
             void encode(EncoderProvider & encoder, const test::ObjectC & object) {
-                
+                encoder.encodeElement<std::string>("str", object.str);
             }
         };
     }

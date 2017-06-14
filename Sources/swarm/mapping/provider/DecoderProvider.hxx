@@ -18,11 +18,27 @@
 #ifndef SWARM_MAPPING_DECODERPROVIDER_HXX
 #define SWARM_MAPPING_DECODERPROVIDER_HXX
 
+#include <string>
+#include <memory>
+
 namespace swarm {
     namespace mapping {
 
         /// \brief Class DecoderProvider
-        class DecoderProvider {};
+        struct DecoderProvider {
+            
+            /// \brief Decode an attribute
+            /// \param name Attribuute name
+            /// \return Attribute value or invalid pointer
+            template<typename T> 
+            std::shared_ptr<T> decodeAttribute(const std::string & name);
+            
+            /// \brief Decode an element
+            /// \param name Element name
+            /// \return Element value or invalid pointer
+            template<typename T> 
+            std::shared_ptr<T> decodeElement(const std::string & name);
+        };
     }
 }
 
