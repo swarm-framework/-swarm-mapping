@@ -30,22 +30,11 @@ namespace swarm {
             /// \brief Encode an object using an encoder provider
             /// \param encoder Encoder used to encode object
             /// \param object Object to encode
-            void encode(EncoderProvider & encoder, const Object & object) {
-                throw SwarmException{"Unable to find encoder for an object"};
-            }
-            
-            /// \brief Encode an object using an encoder provider
-            /// \param encoder Encoder used to encode object
-            /// \param object Object to encode
-            void encode(EncoderProvider & encoder, const Object & object) {
-                if (object) {
-                    encode(encoder, *object);
-                }
-            }
+            virtual void encode(EncoderProvider & encoder, const Object & object);
         };
     }
 }
 
-#endif // SWARM_MAPPING_OBJECTENCODER_HXX
-
 #include "ObjectEncoder.txx"
+
+#endif // SWARM_MAPPING_OBJECTENCODER_HXX

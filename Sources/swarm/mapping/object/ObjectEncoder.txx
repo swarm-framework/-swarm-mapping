@@ -19,4 +19,14 @@
 #include "ObjectEncoder.hxx"
 #endif
 
-
+namespace swarm {
+    namespace mapping {
+        
+        // Encode an object using an encoder provider
+        template<class Object>
+        void ObjectEncoder<Object>::encode(EncoderProvider & encoder, const Object & object) {
+            throw SwarmException{"Unable to find encoder for an object"};
+        }
+            
+    }
+}

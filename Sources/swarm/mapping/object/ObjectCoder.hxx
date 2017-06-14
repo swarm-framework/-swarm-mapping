@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,32 @@
  *
  */
 
-#ifndef SWARM_MAPPING_OBJECTDECODER_HXX
-#define SWARM_MAPPING_OBJECTDECODER_HXX
+#ifndef SWARM_MAPPING_OBJECTCODER_HXX
+#define SWARM_MAPPING_OBJECTCODER_HXX
 
-#include <memory>
-#include <swarm/exception/SwarmException.hxx>
+#include "ObjectDecoder.hxx"
+#include "ObjectEncoder.hxx"
 
 namespace swarm {
     namespace mapping {
         
-        struct DecoderProvider;
-        
-        /// \brief Class ObjectDecoder
+        /// \brief Class ObjectCoder
         template<class Object>
-        struct ObjectDecoder {
+        struct ObjectCoder {
             
             /// \brief Decode an object using a decoder provider
             /// \param decoder Decoder used to decode object
             /// \return Object decoded
-            virtual std::shared_ptr<Object> decode(DecoderProvider & decoder);
+            std::shared_ptr<Object> decode(DecoderProvider & decoder);
+            
+            /// \brief Encode an object using an encoder provider
+            /// \param encoder Encoder used to encode object
+            /// \param object Object to encode
+            void encode(EncoderProvider & encoder, const Object & object);
         };
     }
 }
 
-#include "ObjectDecoder.txx"
+#include "ObjectCoder.txx"
 
-#endif // SWARM_MAPPING_OBJECTDECODER_HXX
+#endif // SWARM_MAPPING_OBJECTCODER_HXX

@@ -1,33 +1,37 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
- * 
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
-#ifndef SWARM_MAPPING_OBJECTDECODER_HXX
-#include "ObjectDecoder.hxx"
+#ifndef SWARM_MAPPING_OBJECTCODER_HXX
+#include "ObjectCoder.hxx"
 #endif
 
 namespace swarm {
     namespace mapping {        
-          
+        
         // Decode an object using a decoder provider
         template<class Object>
-        std::shared_ptr<Object> ObjectDecoder<Object>::decode(DecoderProvider & decoder) {
-            throw SwarmException{"Unable to find decoder for an object"};
+        std::shared_ptr<Object> ObjectCoder<Object>::decode(DecoderProvider & decoder) {
+            return ObjectDecoder<Object>{}.decode(decoder);
         }
-            
+                    
+        // Encode an object using an encoder provider
+        template<class Object>
+        void ObjectCoder<Object>::encode(EncoderProvider & encoder, const Object & object) {
+            ObjectEncoder<Object>{}.encode(encoder, object);
+        }
     }
 }
-

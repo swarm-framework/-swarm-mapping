@@ -5,6 +5,8 @@ find_dependencies(swarm-commons)
 
 # Create targets
 add_library(swarm-mapping
+
+    Sources/swarm/mapping/object/ObjectCoder.hxx Sources/swarm/mapping/object/ObjectCoder.txx
     Sources/swarm/mapping/object/ObjectEncoder.hxx Sources/swarm/mapping/object/ObjectEncoder.txx
     Sources/swarm/mapping/object/ObjectDecoder.hxx Sources/swarm/mapping/object/ObjectDecoder.txx
     

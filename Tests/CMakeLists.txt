@@ -10,24 +10,28 @@ if (NOT "${CATCH_FILE_PATH}")
     file(DOWNLOAD "https://github.com/philsquared/Catch/releases/download/${CATCH_VERSION}/catch.hpp" "${CATCH_FILE_PATH}")
 endif()
 
-# Includes
-include_directories(
-    ../Sources  # Project sources
-    ${cxx-logs-INCLUDE}         # Include cxx-log
-    ${swarm-commons_INCLUDE}   # Include Swarm commons
-    ${PROJECT_SOURCE_DIR}/Dependencies/volatile/${CATCH_VERSION} # catch directory
-)
-
-# Add sources files
-set (${PROJECT_NAME}_TEST_SOURCES
-    main.cxx
-)
-
 # Create create executable
-add_executable(${PROJECT_NAME}Tests ${${PROJECT_NAME}_TEST_SOURCES})
+add_executable(${PROJECT_NAME}Tests 
+    main.cxx
+    swarm/mapping/ObjectCoderTest.cxx
+)
 target_link_libraries(${PROJECT_NAME}Tests
     ${PROJECT_NAME}
 )
+target_include_directories(
+    ${PROJECT_NAME}Tests  
+    
+    PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Sources>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+        
+    PRIVATE
+        ../Sources
+        ${cxx-log_INCLUDE_DIR}
+        ${swarm-commons_INCLUDE_DIR}
+        ${PROJECT_SOURCE_DIR}/Dependencies/volatile/${CATCH_VERSION} # catch directory
+)
+
 
 # Register test
 add_test(${PROJECT_NAME}Tests ${PROJECT_NAME}Tests)

@@ -18,13 +18,13 @@
 #ifndef SWARM_MAPPING_JSONENCODER_HXX
 #define SWARM_MAPPING_JSONENCODER_HXX
 
-#include "../DecoderProvider.hxx"
+#include "../EncoderProvider.hxx"
 
 namespace swarm {
     namespace mapping {
 
         /// \brief Class JSonEncoder
-        class JSonEncoder : public DecoderProvider {};
+        class JSonEncoder : public EncoderProvider {};
     }
 }
 
