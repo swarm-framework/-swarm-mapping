@@ -17,8 +17,7 @@
 #include <catch/catch.hxx>
 
 #include <swarm/mapping/object/ObjectCoder.hxx>
-#include <swarm/mapping/provider/json/JSonEncoder.hxx>
-#include <swarm/mapping/provider/json/JSonDecoder.hxx>
+#include "sample/SampleCoder.hxx"
 
 namespace swarm {
     
@@ -92,8 +91,8 @@ TEST_CASE("Object coder", "[object]") {
     ObjectB objectB{};
     ObjectC objectC{};
     
-    JSonEncoder encoder{};
-    JSonDecoder decoder{};
+    SampleEncoder encoder{};
+    SampleDecoder decoder{};
     
     REQUIRE_THROWS(coderA.encode(encoder, objectA));
     REQUIRE_THROWS(coderA.decode(decoder));

@@ -13,6 +13,8 @@ endif()
 # Create create executable
 add_executable(${PROJECT_NAME}Tests 
     main.cxx
+    
+    swarm/mapping/sample/SampleCoder.cxx swarm/mapping/sample/SampleCoder.hxx
     swarm/mapping/ObjectCoderTest.cxx
 )
 target_link_libraries(${PROJECT_NAME}Tests
