@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,4 @@
  * 
  */
 
-#ifndef SWARM_MAPPING_OBJECTDECODER_HXX
-#include "ObjectDecoder.hxx"
-#endif
-
-namespace swarm {
-    namespace mapping {        
-          
-        // Decode an object using a decoder provider
-        template<class Object>
-        std::shared_ptr<Object> ObjectDecoder<Object>::decode(DecoderProvider & decoder) {
-            throw SwarmException{"Unable to find decoder for an object"};
-        }
-            
-    }
-}
-
+#include "Decoder.hxx"

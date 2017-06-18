@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,37 @@
  *
  */
 
-#ifndef SWARM_MAPPING_SAMPLECODER_HXX
-#define SWARM_MAPPING_SAMPLECODER_HXX
+#ifndef SWARM_MAPPING_DECODER_HXX
+#define SWARM_MAPPING_DECODER_HXX
 
-#include <string>
 #include <memory>
-#include <iostream>
 
 namespace swarm {
     namespace mapping {
 
-        struct SampleEncoder {
+        /// \brief Class Decoder
+        template <class Provider>
+        class Decoder {
             
-            void encode(const std::string & name, int value) {
-                std::cout << "Encode " << name << " as int" << std::endl;
-            }
-        };
-        
-        struct SampleDecoder {
+        private:
+            Provider & provider_;
             
-            void decode(const std::string & name, std::shared_ptr<int> & value) {
-                value.reset(new int {10});
+        public:
+            Decoder(Provider & provider) : provider_(provider) {
+                
             }
+
+            template <typename T>
+            std::shared_ptr<T> decode(const std::string & name) {
+                
+                std::shared_ptr<T> value;
+                provider_.decode(name, value);
+                return value;
+                
+            }
+            
         };
     }
 }
 
-#endif // SWARM_MAPPING_SAMPLECODER_HXX
+#endif // SWARM_MAPPING_DECODER_HXX

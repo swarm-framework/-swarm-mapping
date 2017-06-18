@@ -15,23 +15,15 @@
  *
  */
 
-#ifndef SWARM_MAPPING_OBJECTCODER_HXX
-#include "ObjectCoder.hxx"
-#endif
+#ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
+#define SWARM_MAPPING_RAPIDJSONDECODER_HXX
 
 namespace swarm {
-    namespace mapping {        
-        
-        // Decode an object using a decoder provider
-        template<class Object>
-        std::shared_ptr<Object> ObjectCoder<Object>::decode(DecoderProvider & decoder) {
-            return ObjectDecoder<Object>{}.decode(decoder);
-        }
-                    
-        // Encode an object using an encoder provider
-        template<class Object>
-        void ObjectCoder<Object>::encode(EncoderProvider & encoder, const Object & object) {
-            ObjectEncoder<Object>{}.encode(encoder, object);
-        }
+    namespace mapping {
+
+        /// \brief Class RapidJSONDecoder
+        class RapidJSONDecoder {};
     }
 }
+
+#endif // SWARM_MAPPING_RAPIDJSONDECODER_HXX
