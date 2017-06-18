@@ -17,8 +17,59 @@
 
 #include <catch/catch.hxx>
 
-//#include <swarm/mapping/provider/json/rapidjson/RapidJSONEncoder.hxx>
+#include <swarm/mapping/Mapping.hxx>
+#include <swarm/mapping/DefaultMapping.hxx>
+#include <swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx>
+#include <swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx>
+#include <sstream>
+#include <iostream>
+
+using namespace swarm::mapping;
+
+namespace swarm {
+
+    namespace mapping {
+        
+        namespace RapidJSON {
+            
+            struct TestSerialization {
+                int attr1 = 30;
+            };
+            
+            
+        }
+        
+        template<class EncoderProvider, class DecoderProvider>
+        struct Mapping<EncoderProvider, DecoderProvider, RapidJSON::TestSerialization> : public DefaultMapping<EncoderProvider, DecoderProvider, RapidJSON::TestSerialization> {
+            
+            /// \brief Encode an object
+            /// \param encoder Encoder provider
+            /// \param o Object to encode
+            virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::TestSerialization & o) override {
+                encoder.template encode<int>("attr1", o.attr1);
+            }
+        };
+    }
+}
+
 
 TEST_CASE("Rapid JSON encoder", "[rapidjson]") {
     
+    RapidJSONEncoder rapidJSONEncoder{};
+    
+    Mapping<RapidJSONEncoder, RapidJSONDecoder, RapidJSON::TestSerialization> mappingTestSerialization{};
+    
+    RapidJSON::TestSerialization testSerialization{};
+    
+    // Create encoder provider
+    Encoder<RapidJSONEncoder> encoder {rapidJSONEncoder};
+    
+    // Encode object A
+    mappingTestSerialization.encode(encoder, testSerialization);
+    
+    std::stringstream ss;
+    
+    rapidJSONEncoder.write(ss);
+    
+    std::cout << ss.str() << std::endl;
 }

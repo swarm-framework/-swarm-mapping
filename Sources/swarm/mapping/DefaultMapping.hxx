@@ -31,17 +31,21 @@ namespace swarm {
         template <class EncoderProvider, class DecoderProvider, class Object> 
         struct DefaultMapping {
                
-            virtual void encode(Encoder<EncoderProvider> & encoder, const Object & o) {
-                throw SwarmException{"Encoder not implemented"};
-            }
+            /// \brief Encode an object
+            /// \param encoder Encoder provider
+            /// \param o Object to encode
+            virtual void encode(Encoder<EncoderProvider> & encoder, const Object & o);
 
-            virtual std::shared_ptr<Object> decode(Decoder<DecoderProvider> &decoder) {
-                throw SwarmException{"Decoder not implemented"};
-            }
+            /// \brief Decode an object
+            /// \param decoder Decoder provider
+            virtual std::shared_ptr<Object> decode(Decoder<DecoderProvider> &decoder);
             
-            virtual ~ DefaultMapping() {}
+            /// \brief Destructor
+            virtual ~ DefaultMapping();
         };
     }
 }
+
+#include "DefaultMapping.txx"
 
 #endif // SWARM_MAPPING_DEFAULTMAPPING_HXX

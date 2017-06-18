@@ -18,12 +18,25 @@
 #ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
 #define SWARM_MAPPING_RAPIDJSONDECODER_HXX
 
+#include <rapidjson/document.h>
+
+using namespace rapidjson;
+
 namespace swarm {
     namespace mapping {
 
         /// \brief Class RapidJSONDecoder
-        class RapidJSONDecoder {};
+        class RapidJSONDecoder {
+            
+        private:
+            
+            // Document
+            Document document;
+            
+        };
     }
 }
+
+#include "RapidJSONDecoder.txx"
 
 #endif // SWARM_MAPPING_RAPIDJSONDECODER_HXX

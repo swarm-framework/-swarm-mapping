@@ -28,24 +28,20 @@ namespace swarm {
         class Decoder {
             
         private:
+            
+            /// \brief Provider
             Provider & provider_;
             
         public:
-            Decoder(Provider & provider) : provider_(provider) {
-                
-            }
+            Decoder(Provider & provider) : provider_(provider) {}
 
             template <typename T>
-            std::shared_ptr<T> decode(const std::string & name) {
-                
-                std::shared_ptr<T> value;
-                provider_.decode(name, value);
-                return value;
-                
-            }
+            std::shared_ptr<T> decode(const std::string & name);
             
         };
     }
 }
+
+#include "Decoder.txx"
 
 #endif // SWARM_MAPPING_DECODER_HXX

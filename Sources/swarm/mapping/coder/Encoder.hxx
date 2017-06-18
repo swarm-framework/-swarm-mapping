@@ -29,39 +29,25 @@ namespace swarm {
         class Encoder {
             
         private:
-            Provider & provider_;
             
+            Provider & provider_;
             
         public:
             
-            Encoder(Provider & provider) : provider_(provider) {
-                
-            }
+            Encoder(Provider & provider) : provider_(provider) {}
             
             template <typename T>
-            void encode(const std::string & name, const T &value) {
-                provider_.encode(name, value);
-            }
+            void encode(const std::string & name, const T &value);
                         
             template <typename T>
-            void encode(const std::string & name, const T *value) {
-                if (value == nullptr) {
-                    // FIXME Log
-                } else {
-                    encode(name, *value);
-                }
-            }
+            void encode(const std::string & name, const T *value);
                                   
             template <typename T>
-            void encode(const std::string & name, const std::shared_ptr<T> value) {
-                if (value) {
-                    encode(name, *value);
-                } else {
-                    // FIXME Log
-                }
-            }
+            void encode(const std::string & name, const std::shared_ptr<T> value);
         };
     }
 }
+
+#include "Encoder.txx"
 
 #endif // SWARM_MAPPING_ENCODER_HXX

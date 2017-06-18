@@ -18,12 +18,39 @@
 #ifndef SWARM_MAPPING_RAPIDJSONENCODER_HXX
 #define SWARM_MAPPING_RAPIDJSONENCODER_HXX
 
+#include <rapidjson/document.h>
+#include <ostream>
+
+using namespace rapidjson;
+
 namespace swarm {
     namespace mapping {
 
         /// \brief Class RapidJSONEncoder
-        class RapidJSONEncoder {};
+        class RapidJSONEncoder {
+            
+        private:
+            
+            // Document
+            Document document;
+            
+            /// \brief Encode rapid JSON value
+            /// \param name Attribut name
+            /// \param value RapidJSON value
+            void encode(const std::string & name, Value value);
+            
+        public:
+            
+            RapidJSONEncoder();
+            
+            template <typename T>
+            void encode(const std::string & name, const T & value);
+            
+            void write(std::ostream & ostream);
+        };
     }
 }
+
+#include "RapidJSONEncoder.txx"
 
 #endif // SWARM_MAPPING_RAPIDJSONENCODER_HXX
