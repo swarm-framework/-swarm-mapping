@@ -26,7 +26,7 @@
 
 namespace swarm {
     namespace mapping {
-
+        
         /// \brief Class DefaultMapping
         template <class EncoderProvider, class DecoderProvider, class Object> 
         struct DefaultMapping {

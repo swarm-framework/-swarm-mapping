@@ -32,12 +32,28 @@ namespace swarm {
         
         namespace RapidJSON {
             
+            struct SubObject {
+              std::string name = "subObjectName";  
+            };
+            
             struct TestSerialization {
                 int attr1 = 30;
+                SubObject subObject1;
             };
             
             
         }
+        
+        template<class EncoderProvider, class DecoderProvider>
+        struct Mapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject> : public DefaultMapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject> {
+            
+            /// \brief Encode an object
+            /// \param encoder Encoder provider
+            /// \param o Object to encode
+            virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::SubObject & o) override {
+                encoder.template encode<std::string>("name", o.name);
+            }
+        };
         
         template<class EncoderProvider, class DecoderProvider>
         struct Mapping<EncoderProvider, DecoderProvider, RapidJSON::TestSerialization> : public DefaultMapping<EncoderProvider, DecoderProvider, RapidJSON::TestSerialization> {
@@ -47,6 +63,9 @@ namespace swarm {
             /// \param o Object to encode
             virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::TestSerialization & o) override {
                 encoder.template encode<int>("attr1", o.attr1);
+                
+                Mapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject>mapperA{};
+                encoder.template encode(mapperA, "subObjectName", o.subObject1);
             }
         };
     }

@@ -32,6 +32,7 @@ namespace swarm {
         
         struct ObjectB {
             int attr1;
+            ObjectA objectA{};
         };
         
         struct ObjectC {
@@ -67,7 +68,10 @@ namespace swarm {
             
             void encode(Encoder<EncoderProvider> & encoder, const test::ObjectB & o) {
                 std::cout << "Encode B" << std::endl;
-                encoder.encode(" - attr1", o.attr1);
+                encoder.encode("attr1", o.attr1);
+                
+                Mapping<EncoderProvider, DecoderProvider, test::ObjectA>mapperA{};
+                encoder.encode(mapperA, "objectA", o.objectA);
             }
         };
     }

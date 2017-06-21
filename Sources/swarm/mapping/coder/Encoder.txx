@@ -19,6 +19,7 @@
 #include "Encoder.hxx"
 #endif
 
+
 namespace swarm {
     namespace mapping {
         
@@ -46,6 +47,14 @@ namespace swarm {
             } else {
                 // FIXME Log
             }
+        }
+                    
+        template <class Provider>
+        template <class M, typename V>
+        void Encoder<Provider>::encode(M & mapper, const std::string name, const V & value) {
+            auto encoderProvider = provider_.subObject(name);
+            Encoder<Provider> encoder{*encoderProvider};
+            mapper.encode(encoder, value);
         }
     }
 }

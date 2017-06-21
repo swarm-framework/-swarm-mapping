@@ -1,3 +1,7 @@
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/stringbuffer.h>
 /*
  * Copyright 2017 Damien Giron <contact@damiengiron.me>
  * 
@@ -27,15 +31,18 @@
 namespace swarm {
     namespace mapping {
         
-        RapidJSONEncoder::RapidJSONEncoder() {
-            document.SetObject();
+        RapidJSONEncoder::RapidJSONEncoder() : stringBuffer(std::make_shared<StringBuffer>()), writer(std::make_shared<Writer<StringBuffer>>(*stringBuffer)) {
+            writer->StartObject();
         }
         
-        // Encode rapid JSON value
-        void RapidJSONEncoder::encode(const std::string & name, Value value) {
-            // explicit parameters
-            Value key(name.c_str(), document.GetAllocator()); // copy string name
-            document.AddMember(key, value, document.GetAllocator());
+        RapidJSONEncoder::RapidJSONEncoder(std::shared_ptr<StringBuffer> stringBuffer, std::shared_ptr<Writer<StringBuffer>> writer) : stringBuffer(stringBuffer), writer(writer) {
+            writer->StartObject();
+        }
+        
+        RapidJSONEncoder::~RapidJSONEncoder() {
+            if (open) {
+                writer->EndObject();
+            }
         }
         
         template <typename T>
@@ -45,13 +52,27 @@ namespace swarm {
               
         template <>
         void RapidJSONEncoder::encode(const std::string & name, const int & value) {
-            encode(name, Value(value));
+            writer->Key(name.c_str());
+            writer->Int(value);
+        }
+                    
+        template <>
+        void RapidJSONEncoder::encode(const std::string & name, const std::string & value) {
+            writer->Key(name.c_str());
+            writer->String(value.c_str());
         }
                 
         void RapidJSONEncoder::write(std::ostream & ostream) {
-            OStreamWrapper osw(ostream);
-            Writer<OStreamWrapper> writer(osw);
-            document.Accept(writer);
+            if (open) {
+                writer->EndObject();
+                open = false;
+            }
+            ostream << stringBuffer->GetString();
+        }
+        
+        std::shared_ptr<RapidJSONEncoder> RapidJSONEncoder::subObject(const std::string & name) {            
+            writer->Key(name.c_str());
+            return std::make_shared<RapidJSONEncoder>(stringBuffer, writer);
         }
     }
 }

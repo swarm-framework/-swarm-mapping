@@ -18,8 +18,10 @@
 #ifndef SWARM_MAPPING_RAPIDJSONENCODER_HXX
 #define SWARM_MAPPING_RAPIDJSONENCODER_HXX
 
-#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 #include <ostream>
+#include <memory>
 
 using namespace rapidjson;
 
@@ -31,22 +33,24 @@ namespace swarm {
             
         private:
             
-            // Document
-            Document document;
+            std::shared_ptr<StringBuffer> stringBuffer;
             
-            /// \brief Encode rapid JSON value
-            /// \param name Attribut name
-            /// \param value RapidJSON value
-            void encode(const std::string & name, Value value);
+            std::shared_ptr<Writer<StringBuffer>> writer;
+            
+            bool open = true;
             
         public:
             
             RapidJSONEncoder();
+            RapidJSONEncoder(std::shared_ptr<StringBuffer> stringBuffer, std::shared_ptr<Writer<StringBuffer>> writer);
+            ~RapidJSONEncoder();
             
             template <typename T>
             void encode(const std::string & name, const T & value);
             
             void write(std::ostream & ostream);
+            
+            std::shared_ptr<RapidJSONEncoder> subObject(const std::string & name);
         };
     }
 }

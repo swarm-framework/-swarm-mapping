@@ -30,6 +30,10 @@ namespace swarm {
             void encode(const std::string & name, int value) {
                 std::cout << "Encode " << name << " as int" << std::endl;
             }
+            
+            std::shared_ptr<SampleEncoder> subObject(const std::string & name) {
+                return std::shared_ptr<SampleEncoder>();
+            }
         };
         
         struct SampleDecoder {
