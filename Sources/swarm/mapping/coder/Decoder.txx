@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,4 +15,22 @@
  * 
  */
 
-#include "JSonDecoder.hxx"
+#ifndef SWARM_MAPPING_DECODER_HXX
+#include "Decoder.hxx"
+#endif
+
+namespace swarm {
+    namespace mapping {
+        
+        // Decode an object
+        template <class Provider>
+        template <typename T>
+        std::shared_ptr<T> Decoder<Provider>::decode(const std::string & name) {
+            
+            std::shared_ptr<T> value;
+            provider_.decode(name, value);
+            return value;
+            
+        }
+    }
+}

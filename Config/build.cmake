@@ -3,19 +3,30 @@
 find_dependencies(cxx-log)
 find_dependencies(swarm-commons)
 
+find_package(RapidJSON_DIR QUIET)
+
 # Create targets
 add_library(swarm-mapping
 
-    Sources/swarm/mapping/object/ObjectCoder.hxx Sources/swarm/mapping/object/ObjectCoder.txx
-    Sources/swarm/mapping/object/ObjectEncoder.hxx Sources/swarm/mapping/object/ObjectEncoder.txx
-    Sources/swarm/mapping/object/ObjectDecoder.hxx Sources/swarm/mapping/object/ObjectDecoder.txx
+    Sources/swarm/mapping/coder/Encoder.hxx Sources/swarm/mapping/coder/Encoder.txx 
+    Sources/swarm/mapping/coder/Decoder.hxx Sources/swarm/mapping/coder/Decoder.txx
     
-    Sources/swarm/mapping/provider/EncoderProvider.hxx Sources/swarm/mapping/provider/EncoderProvider.txx
-    Sources/swarm/mapping/provider/DecoderProvider.hxx Sources/swarm/mapping/provider/DecoderProvider.txx
-    
-    Sources/swarm/mapping/provider/json/JSonEncoder.cxx Sources/swarm/mapping/provider/json/JSonEncoder.hxx
-    Sources/swarm/mapping/provider/json/JSonDecoder.cxx Sources/swarm/mapping/provider/json/JSonDecoder.hxx
+    Sources/swarm/mapping/Mapping.cxx  Sources/swarm/mapping/Mapping.hxx Sources/swarm/mapping/Mapping.txx
 )
+
+# Test RapidJSON
+if(DEFINED RapidJSON_DIR)
+    message(STATUS "Build RapidJSON mapping with ${RapidJSON_DIR}")
+    target_sources(swarm-mapping
+    
+        PRIVATE
+        
+            Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.txx
+            Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.txx
+    )
+else()
+    message(STATUS "Unable to find RapidJSON, mapping disabled")
+endif()
 
 # Properties of targets
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,33 @@
  *
  */
 
-#ifndef SWARM_MAPPING_DECODERPROVIDER_HXX
-#define SWARM_MAPPING_DECODERPROVIDER_HXX
+#ifndef SWARM_MAPPING_DECODER_HXX
+#define SWARM_MAPPING_DECODER_HXX
+
+#include <memory>
 
 namespace swarm {
     namespace mapping {
 
-        /// \brief Class DecoderProvider
-        class DecoderProvider {};
+        /// \brief Class Decoder
+        template <class Provider>
+        class Decoder {
+            
+        private:
+            
+            /// \brief Provider
+            Provider & provider_;
+            
+        public:
+            Decoder(Provider & provider) : provider_(provider) {}
+
+            template <typename T>
+            std::shared_ptr<T> decode(const std::string & name);
+            
+        };
     }
 }
 
-#endif // SWARM_MAPPING_DECODERPROVIDER_HXX
+#include "Decoder.txx"
 
-#include "DecoderProvider.txx"
+#endif // SWARM_MAPPING_DECODER_HXX

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,4 +15,6 @@
  * 
  */
 
-#include "JSonEncoder.hxx"
+#ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
+#include "RapidJSONDecoder.hxx"
+#endif

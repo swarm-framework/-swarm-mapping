@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,4 @@
  *
  */
 
-#ifndef SWARM_MAPPING_JSONDECODER_HXX
-#define SWARM_MAPPING_JSONDECODER_HXX
-
-#include "../DecoderProvider.hxx"
-
-namespace swarm {
-    namespace mapping {
-
-        /// \brief Class JSonDecoder
-        class JSonDecoder : public DecoderProvider {};
-    }
-}
-
-#endif // SWARM_MAPPING_JSONDECODER_HXX
+#include "Mapping.hxx"

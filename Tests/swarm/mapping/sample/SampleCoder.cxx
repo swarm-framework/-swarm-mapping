@@ -14,6 +14,5 @@
  * limitations under the License.
  * 
  */
-#ifndef SWARM_MAPPING_DECODERPROVIDER_HXX
-#include "DecoderProvider.hxx"
-#endif
+
+#include "SampleCoder.hxx"

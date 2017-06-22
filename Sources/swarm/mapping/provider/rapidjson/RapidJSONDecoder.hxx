@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Dami <contact@damiengiron.me>
+ * Copyright 2017 Damien Giron <contact@damiengiron.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,28 @@
  *
  */
 
-#ifndef SWARM_MAPPING_ENCODERPROVIDER_HXX
-#define SWARM_MAPPING_ENCODERPROVIDER_HXX
+#ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
+#define SWARM_MAPPING_RAPIDJSONDECODER_HXX
+
+#include <rapidjson/document.h>
+
+using namespace rapidjson;
 
 namespace swarm {
     namespace mapping {
 
-        /// \brief Class EncoderProvider
-        class EncoderProvider {};
+        /// \brief Class RapidJSONDecoder
+        class RapidJSONDecoder {
+            
+        private:
+            
+            // Document
+            Document document;
+            
+        };
     }
 }
 
-#endif // SWARM_MAPPING_ENCODERPROVIDER_HXX
+#include "RapidJSONDecoder.txx"
 
-#include "EncoderProvider.txx"
+#endif // SWARM_MAPPING_RAPIDJSONDECODER_HXX

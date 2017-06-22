@@ -15,29 +15,34 @@
  *
  */
 
-#ifndef SWARM_MAPPING_OBJECTDECODER_HXX
-#define SWARM_MAPPING_OBJECTDECODER_HXX
+#ifndef SWARM_MAPPING_SAMPLECODER_HXX
+#define SWARM_MAPPING_SAMPLECODER_HXX
 
+#include <string>
 #include <memory>
-#include <swarm/exception/SwarmException.hxx>
+#include <iostream>
 
 namespace swarm {
     namespace mapping {
-        
-        struct DecoderProvider;
-        
-        /// \brief Class ObjectDecoder
-        template<class Object>
-        struct ObjectDecoder {
+
+        struct SampleEncoder {
             
-            /// \brief Decode an object using a decoder provider
-            /// \param decoder Decoder used to decode object
-            /// \return Object decoded
-            virtual std::shared_ptr<Object> decode(DecoderProvider & decoder);
+            void encode(const std::string & name, int value) {
+                std::cout << "Encode " << name << " as int" << std::endl;
+            }
+            
+            std::shared_ptr<SampleEncoder> subObject(const std::string & name) {
+                return std::shared_ptr<SampleEncoder>();
+            }
+        };
+        
+        struct SampleDecoder {
+            
+            void decode(const std::string & name, std::shared_ptr<int> & value) {
+                value.reset(new int {10});
+            }
         };
     }
 }
 
-#include "ObjectDecoder.txx"
-
-#endif // SWARM_MAPPING_OBJECTDECODER_HXX
+#endif // SWARM_MAPPING_SAMPLECODER_HXX

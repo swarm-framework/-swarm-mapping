@@ -16,55 +16,61 @@
  */
 #include <catch/catch.hxx>
 
-#include <swarm/mapping/object/ObjectCoder.hxx>
-#include <swarm/mapping/provider/json/JSonEncoder.hxx>
-#include <swarm/mapping/provider/json/JSonDecoder.hxx>
+#include <iostream>
+
+#include <swarm/mapping/Mapping.hxx>
+#include "sample/SampleCoder.hxx"
 
 namespace swarm {
     
     namespace test {
         
-        class ObjectA {
-            
+        struct ObjectA {
+            int attr1;
         };
         
-        class ObjectB {
-            
+        struct ObjectB {
+            int attr1;
+            ObjectA objectA{};
         };
         
-        class ObjectC {
-            
+        struct ObjectC {
+            std::string str;
         };
     }
     
     namespace mapping {
         
-        template<>
-        struct ObjectCoder<test::ObjectB> {
+        /// \brief Class Mapping
+        template<class EncoderProvider, class DecoderProvider>
+        struct Mapping<EncoderProvider, DecoderProvider, test::ObjectA> {
             
-            /// \brief Decode an object using a decoder provider
-            /// \param decoder Decoder used to decode object
-            /// \return Object decoded
-            std::shared_ptr<test::ObjectB> decode(DecoderProvider & decoder) {
-                return std::shared_ptr<test::ObjectB>{};
+            void encode(Encoder<EncoderProvider> & encoder, const test::ObjectA & o) {
+                std::cout << "Encode A" << std::endl;
+                encoder.encode("attr1", o.attr1);
             }
-            
-            /// \brief Encode an object using an encoder provider
-            /// \param encoder Encoder used to encode object
-            /// \param object Object to encode
-            void encode(EncoderProvider & encoder, const test::ObjectB & object) {
-                
+
+            std::shared_ptr<test::ObjectA> decode(Decoder<DecoderProvider> &decoder) {
+                std::cout << "Decode A" << std::endl;
+                auto object = std::make_shared<test::ObjectA>();
+                auto r = decoder.template decode<int>("attr1");
+                if (r) {
+                    object->attr1 = *r;
+                }
+                return object;
             }
         };
-        
-        template<>
-        struct ObjectEncoder<test::ObjectC> {
-               
-            /// \brief Encode an object using an encoder provider
-            /// \param encoder Encoder used to encode object
-            /// \param object Object to encode
-            void encode(EncoderProvider & encoder, const test::ObjectC & object) {
                 
+        /// \brief Class Mapping
+        template<class EncoderProvider, class DecoderProvider>
+        struct Mapping<EncoderProvider, DecoderProvider, test::ObjectB> : public DefaultMapping<EncoderProvider, DecoderProvider, test::ObjectB> {
+            
+            void encode(Encoder<EncoderProvider> & encoder, const test::ObjectB & o) {
+                std::cout << "Encode B" << std::endl;
+                encoder.encode("attr1", o.attr1);
+                
+                Mapping<EncoderProvider, DecoderProvider, test::ObjectA>mapperA{};
+                encoder.encode(mapperA, "objectA", o.objectA);
             }
         };
     }
@@ -75,26 +81,45 @@ using namespace swarm::mapping;
 using namespace swarm::test;
 
 TEST_CASE("Object coder", "[object]") {
+        
+    // Create mapping
+    Mapping<SampleEncoder, SampleDecoder, ObjectA> mappingA{};
+    Mapping<SampleEncoder, SampleDecoder, ObjectB> mappingB{};
+    Mapping<SampleEncoder, SampleDecoder, ObjectC> mappingC{};
     
-    ObjectCoder<ObjectA> coderA{};
-    ObjectCoder<ObjectB> coderB{};
-    ObjectCoder<ObjectC> coderC{};
-    
+    // Create objects
     ObjectA objectA{};
     ObjectB objectB{};
     ObjectC objectC{};
     
-    JSonEncoder encoder{};
-    JSonDecoder decoder{};
+    // Sample coder
+    SampleEncoder sampleEncoder{};
+    SampleDecoder sampleDecoder{};
     
-    REQUIRE_THROWS(coderA.encode(encoder, objectA));
-    REQUIRE_THROWS(coderA.decode(decoder));
+    // Create encoder provider
+    Encoder<SampleEncoder> encoder {sampleEncoder};
+
+    // Create decoder provider
+    Decoder<SampleDecoder> decoder {sampleDecoder};
+        
+    // Encode object A
+    mappingA.encode(encoder, objectA);
     
-    REQUIRE_NOTHROW(coderB.encode(encoder, objectB));
-    REQUIRE_NOTHROW(coderB.decode(decoder));
+    // Encode Object B
+    mappingB.encode(encoder, objectB);
     
-    REQUIRE_NOTHROW(coderC.encode(encoder, objectC));
-    REQUIRE_THROWS(coderC.decode(decoder));
+    // Encode Object C
+    REQUIRE_THROWS(mappingC.encode(encoder, objectC));
     
-    REQUIRE(true);
+    // Decode Object A
+    auto rA = mappingA.decode(decoder);
+    
+    REQUIRE(rA);
+    REQUIRE(rA->attr1 == 10);
+    
+    // Decode Object B
+    REQUIRE_THROWS(mappingB.decode(decoder));
+    
+    // Decode Object C
+    REQUIRE_THROWS(mappingC.decode(decoder));
 }
