@@ -19,7 +19,6 @@
 #include <iostream>
 
 #include <swarm/mapping/Mapping.hxx>
-#include <swarm/mapping/DefaultMapping.hxx>
 #include "sample/SampleCoder.hxx"
 
 namespace swarm {

@@ -50,8 +50,8 @@ namespace swarm {
         }
                     
         template <class Provider>
-        template <class M, typename V>
-        void Encoder<Provider>::encode(M & mapper, const std::string name, const V & value) {
+        template <class D, typename V>
+        void Encoder<Provider>::encode(Mapping<Provider, D, V> & mapper, const std::string name, const V & value) {
             auto encoderProvider = provider_.subObject(name);
             Encoder<Provider> encoder{*encoderProvider};
             mapper.encode(encoder, value);

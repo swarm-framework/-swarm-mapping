@@ -18,14 +18,37 @@
 #ifndef SWARM_MAPPING_MAPPING_HXX
 #define SWARM_MAPPING_MAPPING_HXX
 
-#include "DefaultMapping.hxx"
 
 #include <memory>
 
 
 namespace swarm {
     namespace mapping {
+        
+        template<class EncoderProvider>
+        class Encoder;
+        
+        template<class DecoderProvider>
+        class Decoder;
+        
+        /// \brief Class DefaultMapping
+        template <class EncoderProvider, class DecoderProvider, class Object> 
+        struct DefaultMapping {
+               
+            /// \brief Encode an object
+            /// \param encoder Encoder provider
+            /// \param o Object to encode
+            virtual void encode(Encoder<EncoderProvider> & encoder, const Object & o);
 
+            /// \brief Decode an object
+            /// \param decoder Decoder provider
+            virtual std::shared_ptr<Object> decode(Decoder<DecoderProvider> &decoder);
+            
+            /// \brief Destructor
+            virtual ~ DefaultMapping();
+        };
+
+        
         /// \brief Class Mapping
         template<class EncoderProvider, class DecoderProvider, class Object>
         struct Mapping : public DefaultMapping<EncoderProvider, DecoderProvider, Object> {
@@ -33,5 +56,7 @@ namespace swarm {
         };
     }
 }
+
+#include "Mapping.txx"
 
 #endif // SWARM_MAPPING_MAPPING_HXX

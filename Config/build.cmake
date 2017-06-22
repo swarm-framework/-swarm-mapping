@@ -11,8 +11,7 @@ add_library(swarm-mapping
     Sources/swarm/mapping/coder/Encoder.hxx Sources/swarm/mapping/coder/Encoder.txx 
     Sources/swarm/mapping/coder/Decoder.hxx Sources/swarm/mapping/coder/Decoder.txx
     
-    Sources/swarm/mapping/Mapping.hxx
-    Sources/swarm/mapping/DefaultMapping.cxx Sources/swarm/mapping/DefaultMapping.hxx Sources/swarm/mapping/DefaultMapping.txx
+    Sources/swarm/mapping/Mapping.cxx  Sources/swarm/mapping/Mapping.hxx Sources/swarm/mapping/Mapping.txx
 )
 
 # Test RapidJSON

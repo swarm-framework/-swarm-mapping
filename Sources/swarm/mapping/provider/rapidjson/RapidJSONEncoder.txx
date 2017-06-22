@@ -1,7 +1,3 @@
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/stringbuffer.h>
 /*
  * Copyright 2017 Damien Giron <contact@damiengiron.me>
  * 
@@ -25,7 +21,6 @@
 
 #include <swarm/exception/SwarmException.hxx>
 
-#include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
 namespace swarm {

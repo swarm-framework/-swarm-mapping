@@ -18,7 +18,6 @@
 #include <catch/catch.hxx>
 
 #include <swarm/mapping/Mapping.hxx>
-#include <swarm/mapping/DefaultMapping.hxx>
 #include <swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx>
 #include <swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx>
 #include <sstream>

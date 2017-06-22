@@ -15,4 +15,4 @@
  *
  */
 
-#include "DefaultMapping.hxx"
+#include "Mapping.hxx"

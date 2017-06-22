@@ -15,9 +15,13 @@
  *
  */
 
-#ifndef SWARM_MAPPING_DEFAULTMAPPING_HXX
-#include "DefaultMapping.hxx"
+#ifndef SWARM_MAPPING_MAPPING_HXX
+#include "Mapping.hxx"
 #endif
+
+#include "coder/Encoder.hxx"
+#include "coder/Decoder.hxx"
+#include <swarm/exception/SwarmException.hxx>
 
 namespace swarm {
     namespace mapping {

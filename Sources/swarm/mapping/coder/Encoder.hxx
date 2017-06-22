@@ -21,6 +21,8 @@
 #include <string>
 #include <memory>
 
+#include "../Mapping.hxx"
+
 namespace swarm {
     namespace mapping {
 
@@ -44,9 +46,9 @@ namespace swarm {
                                   
             template <typename T>
             void encode(const std::string & name, const std::shared_ptr<T> value);
-            
-            template <class M, typename V>
-            void encode(M & mapper, const std::string name, const V & value);
+                        
+            template <class D, typename V>
+            void encode(Mapping<Provider, D, V> & mapper, const std::string name, const V & value);
         };
     }
 }
