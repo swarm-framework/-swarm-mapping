@@ -47,7 +47,7 @@ namespace swarm {
             
             void encode(Encoder<EncoderProvider> & encoder, const test::ObjectA & o) {
                 std::cout << "Encode A" << std::endl;
-                encoder.encode("attr1", o.attr1);
+                encoder.encodeAttribute("attr1", o.attr1);
             }
 
             std::shared_ptr<test::ObjectA> decode(Decoder<DecoderProvider> &decoder) {
@@ -67,10 +67,10 @@ namespace swarm {
             
             void encode(Encoder<EncoderProvider> & encoder, const test::ObjectB & o) {
                 std::cout << "Encode B" << std::endl;
-                encoder.encode("attr1", o.attr1);
+                encoder.encodeAttribute("attr1", o.attr1);
                 
                 Mapping<EncoderProvider, DecoderProvider, test::ObjectA>mapperA{};
-                encoder.encode(mapperA, "objectA", o.objectA);
+                encoder.encodeElement(mapperA, "objectA", o.objectA);
             }
         };
     }
