@@ -3,7 +3,7 @@
 find_dependencies(cxx-log)
 find_dependencies(swarm-commons)
 
-find_package(RapidJSON_DIR QUIET)
+find_package(RapidJSON QUIET)
 
 # Create targets
 add_library(swarm-mapping
@@ -24,6 +24,7 @@ if(DEFINED RapidJSON_DIR)
             Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.txx
             Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.txx
     )
+    
 else()
     message(STATUS "Unable to find RapidJSON, mapping disabled")
 endif()

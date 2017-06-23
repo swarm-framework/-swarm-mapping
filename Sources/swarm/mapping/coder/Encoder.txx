@@ -23,17 +23,21 @@
 namespace swarm {
     namespace mapping {
         
+        
+        template <class Provider>
+        const cxxlog::Logger Encoder<Provider>::LOGGER = LOGGER(Encoder);
+        
         template <class Provider>
         template <typename T>
-        void Encoder<Provider>::encode(const std::string & name, const T &value) {
+        void Encoder<Provider>::encodeAttribute(const std::string & name, const T &value) {
             provider_.encode(name, value);
         }
         
         template <class Provider>
         template <typename T>
-        void Encoder<Provider>::encode(const std::string & name, const T *value) {
+        void Encoder<Provider>::encodeAttribute(const std::string & name, const T *value) {
             if (value == nullptr) {
-                // FIXME Log
+                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null value");
             } else {
                 encode(name, *value);
             }
@@ -41,20 +45,27 @@ namespace swarm {
         
         template <class Provider>
         template <typename T>
-        void Encoder<Provider>::encode(const std::string & name, const std::shared_ptr<T> value) {
+        void Encoder<Provider>::encodeAttribute(const std::string & name, const std::shared_ptr<T> value) {
             if (value) {
                 encode(name, *value);
             } else {
-                // FIXME Log
+                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null value");
             }
         }
                     
         template <class Provider>
         template <class D, typename V>
-        void Encoder<Provider>::encode(Mapping<Provider, D, V> & mapper, const std::string name, const V & value) {
+        void Encoder<Provider>::encodeElement(Mapping<Provider, D, V> & mapper, const std::string name, const V & value) {
             auto encoderProvider = provider_.subObject(name);
             Encoder<Provider> encoder{*encoderProvider};
             mapper.encode(encoder, value);
+        }
+                            
+        template <class Provider>
+        template <class D, typename V>
+        void Encoder<Provider>::encodeElement(const std::string name, const V & value) {
+            Mapping<Provider, D, V> mapping{};
+            encodeElement(mapping, name, value);
         }
     }
 }

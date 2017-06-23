@@ -22,6 +22,7 @@
 #include <memory>
 
 #include "../Mapping.hxx"
+#include <cxxlog/Logger.hxx>
 
 namespace swarm {
     namespace mapping {
@@ -32,23 +33,50 @@ namespace swarm {
             
         private:
             
+            /// \brief Logger
+            static const cxxlog::Logger LOGGER;
+            
+            /// \brief Internal provider
             Provider & provider_;
             
         public:
             
+            /// \brief Constructor with provider
+            /// \param provider Provider
             Encoder(Provider & provider) : provider_(provider) {}
             
+            /// \brief Encode an attribute for a key
+            /// \param name Attribute name
+            /// \param value Attribute value
             template <typename T>
-            void encode(const std::string & name, const T &value);
-                        
+            void encodeAttribute(const std::string & name, const T &value);
+            
+            
+            /// \brief Encode an attribute for a key
+            /// \param name Attribute name
+            /// \param value Attribute value
             template <typename T>
-            void encode(const std::string & name, const T *value);
-                                  
+            void encodeAttribute(const std::string & name, const T *value);
+            
+            
+            /// \brief Encode an attribute for a key
+            /// \param name Attribute name
+            /// \param value Attribute value
             template <typename T>
-            void encode(const std::string & name, const std::shared_ptr<T> value);
-                        
+            void encodeAttribute(const std::string & name, const std::shared_ptr<T> value);
+            
+            /// \brief Encode an element for a key using a mapper
+            /// \param mapper Mapper to use
+            /// \param name Attribute name
+            /// \param value Attribute value
             template <class D, typename V>
-            void encode(Mapping<Provider, D, V> & mapper, const std::string name, const V & value);
+            void encodeElement(Mapping<Provider, D, V> & mapper, const std::string name, const V & value);
+            
+            /// \brief Encode an element for a key
+            /// \param name Attribute name
+            /// \param value Attribute value
+            template <class D, typename V>
+            void encodeElement(const std::string name, const V & value);
         };
     }
 }

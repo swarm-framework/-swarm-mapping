@@ -50,7 +50,7 @@ namespace swarm {
             /// \param encoder Encoder provider
             /// \param o Object to encode
             virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::SubObject & o) override {
-                encoder.template encode<std::string>("name", o.name);
+                encoder.template encodeAttribute<std::string>("name", o.name);
             }
         };
         
@@ -61,10 +61,10 @@ namespace swarm {
             /// \param encoder Encoder provider
             /// \param o Object to encode
             virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::TestSerialization & o) override {
-                encoder.template encode<int>("attr1", o.attr1);
+                encoder.template encodeAttribute<int>("attr1", o.attr1);
                 
                 Mapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject>mapperA{};
-                encoder.template encode(mapperA, "subObjectName", o.subObject1);
+                encoder.template encodeElement(mapperA, "subObjectName", o.subObject1);
             }
         };
     }
