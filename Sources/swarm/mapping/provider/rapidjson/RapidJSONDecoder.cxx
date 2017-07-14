@@ -16,3 +16,57 @@
  */
 
 #include "RapidJSONDecoder.hxx"
+
+#include <istream>
+#include <rapidjson/istreamwrapper.h>
+     
+namespace swarm {
+    namespace mapping {      
+        
+        // Defauft constructor
+        RapidJSONDecoder::RapidJSONDecoder() : RapidJSONDecoder(std::make_shared<Document>()) {
+            
+        }
+                
+        // Defauft constructor
+        RapidJSONDecoder::RapidJSONDecoder(std::shared_ptr<Document> document) : document_(document) {
+            
+        }
+        
+        // Destructor
+        RapidJSONDecoder::~RapidJSONDecoder() {
+            
+        }
+        
+        // Override encode int
+        std::optional<int> RapidJSONDecoder::decodeInt(const std::string & name) {
+            
+            if (document_->HasMember(name.c_str())) {
+                return (*document_)[name.c_str()].GetInt64();
+            } else {
+                return std::optional<int>{};
+            }
+        }
+        
+        // Override encode string
+        std::optional<std::string> RapidJSONDecoder::decodeString(const std::string & name) {
+            
+            if (document_->HasMember(name.c_str())) {
+                return (*document_)[name.c_str()].GetString();
+            } else {
+                return std::optional<std::string>{};
+            }
+        }
+        
+        // Override create new sub object encoder
+        std::shared_ptr<ObjectDecoder> RapidJSONDecoder::subObjectDecoder(const std::string & name) {
+            return std::shared_ptr<ObjectDecoder>{new RapidJSONDecoder{document_}};
+        }
+        
+        /// \brief Read docmument
+        void RapidJSONDecoder::read(std::istream & istream) {
+            IStreamWrapper isw(istream);
+            document_->ParseStream(isw);
+        }
+    }
+}

@@ -18,7 +18,10 @@
 #ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
 #define SWARM_MAPPING_RAPIDJSONDECODER_HXX
 
+#include <optional>
 #include <rapidjson/document.h>
+
+#include "../ObjectProvider.hxx"
 
 using namespace rapidjson;
 
@@ -26,13 +29,37 @@ namespace swarm {
     namespace mapping {
 
         /// \brief Class RapidJSONDecoder
-        class RapidJSONDecoder {
+        class RapidJSONDecoder : public ObjectDecoder {
             
         private:
             
             // Document
-            Document document;
+            std::shared_ptr<Document> document_;
+                        
+            /// \brief Defauft constructor
+            /// \param document JSONDocument
+            RapidJSONDecoder(std::shared_ptr<Document> document);
             
+        public:
+            
+            /// \brief Defauft constructor
+            RapidJSONDecoder();
+            
+            /// \brief Destructor
+            /// Used to close buffer if opened
+            ~RapidJSONDecoder();
+            
+            // Override encode int
+            virtual std::optional<int> decodeInt(const std::string & name) override;
+            
+            // Override encode string
+            virtual std::optional<std::string> decodeString(const std::string & name) override;
+            
+            // Override create new sub object encoder
+            virtual std::shared_ptr<ObjectDecoder> subObjectDecoder(const std::string & name) override;
+            
+            /// \brief Read docmument
+            void read(std::istream & istream);
         };
     }
 }

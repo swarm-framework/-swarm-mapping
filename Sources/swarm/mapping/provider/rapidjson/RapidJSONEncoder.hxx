@@ -36,10 +36,13 @@ namespace swarm {
             
         private:
             
+            /// \brief String buffer
             std::shared_ptr<StringBuffer> stringBuffer;
             
+            /// \brief Writer
             std::shared_ptr<Writer<StringBuffer>> writer;
             
+            /// \brief JSon opened
             bool open = true;
             
             
