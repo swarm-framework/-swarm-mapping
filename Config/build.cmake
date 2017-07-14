@@ -21,8 +21,8 @@ if(DEFINED RapidJSON_DIR)
     
         PRIVATE
         
-            Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.txx
-            Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.txx
+            Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.cxx Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx
+            Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.cxx Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx
     )
     
 else()

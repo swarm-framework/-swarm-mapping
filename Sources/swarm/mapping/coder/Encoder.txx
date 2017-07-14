@@ -19,53 +19,74 @@
 #include "Encoder.hxx"
 #endif
 
-
 namespace swarm {
     namespace mapping {
-        
         
         template <class Provider>
         const cxxlog::Logger Encoder<Provider>::LOGGER = LOGGER(Encoder);
         
+        // --- Attributes ---
+            
+        // Encode an attribute for a key
         template <class Provider>
         template <typename T>
-        void Encoder<Provider>::encodeAttribute(const std::string & name, const T &value) {
-            provider_.encode(name, value);
+        void Encoder<Provider>::encodeAttribute(const std::string & name, const T & value) {
+            provider_.template encode(name, value);
         }
         
+        // Encode an attribute for a key
         template <class Provider>
         template <typename T>
-        void Encoder<Provider>::encodeAttribute(const std::string & name, const T *value) {
-            if (value == nullptr) {
-                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null value");
-            } else {
-                encode(name, *value);
-            }
-        }
-        
-        template <class Provider>
-        template <typename T>
-        void Encoder<Provider>::encodeAttribute(const std::string & name, const std::shared_ptr<T> value) {
+        void Encoder<Provider>::encodeAttribute(const std::string & name, const std::shared_ptr<const T> value) {
             if (value) {
-                encode(name, *value);
+                provider_.template encode(name, *value);
             } else {
                 LOGGER.log(cxxlog::Level::FINE, "Try to encode an null value");
             }
         }
-                    
+        
+        // --- Elements ---
+        
+        
+        // Encode an element for a key using a mapper
         template <class Provider>
         template <class D, typename V>
         void Encoder<Provider>::encodeElement(Mapping<Provider, D, V> & mapper, const std::string name, const V & value) {
-            auto encoderProvider = provider_.subObject(name);
+            auto encoderProvider = provider_.subObjectEncoder(name);
             Encoder<Provider> encoder{*encoderProvider};
             mapper.encode(encoder, value);
         }
-                            
+        
+        // Encode an element for a key using a mapper
+        template <class Provider>
+        template <class D, typename V>
+        void Encoder<Provider>::encodeElement(Mapping<Provider, D, V> & mapper, const std::string name, std::shared_ptr<const V> value) {
+            if (value) {
+                encodeElement(mapper, name, *value);
+            } else {
+                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null element");
+            }
+        }
+        
+        // Encode an element for a key
         template <class Provider>
         template <class D, typename V>
         void Encoder<Provider>::encodeElement(const std::string name, const V & value) {
             Mapping<Provider, D, V> mapping{};
             encodeElement(mapping, name, value);
         }
+        
+        // Encode an element for a key
+        template <class Provider>
+        template <class D, typename V>
+        void Encoder<Provider>::encodeElement(const std::string name, std::shared_ptr<const V> value) {
+            if (value) {
+                encodeElement(name, *value);
+            } else {
+                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null element");
+            }
+        }
     }
 }
+
+

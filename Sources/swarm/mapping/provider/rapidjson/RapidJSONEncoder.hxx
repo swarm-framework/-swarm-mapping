@@ -22,14 +22,17 @@
 #include <rapidjson/writer.h>
 #include <ostream>
 #include <memory>
+#include <string>
+
+#include "../ObjectProvider.hxx"
 
 using namespace rapidjson;
 
 namespace swarm {
     namespace mapping {
-
+                
         /// \brief Class RapidJSONEncoder
-        class RapidJSONEncoder {
+        class RapidJSONEncoder : public ObjectEncoder {
             
         private:
             
@@ -39,22 +42,34 @@ namespace swarm {
             
             bool open = true;
             
+            
+            /// \brief Sub element constructor
+            /// \param stringBuffer RapidJson string buffer
+            /// \param writer RapidJson writer
+            RapidJSONEncoder(std::shared_ptr<StringBuffer> stringBuffer, std::shared_ptr<Writer<StringBuffer>> writer);
+            
         public:
             
+            /// \brief Defauft constructor
             RapidJSONEncoder();
-            RapidJSONEncoder(std::shared_ptr<StringBuffer> stringBuffer, std::shared_ptr<Writer<StringBuffer>> writer);
+            
+            /// \brief Destructor
+            /// Used to close buffer if opened
             ~RapidJSONEncoder();
             
-            template <typename T>
-            void encode(const std::string & name, const T & value);
+            // Override encode int
+            virtual void encodeInt(const std::string & name, int value) override;
             
+            // Override encode string
+            virtual void encodeString(const std::string & name, const std::string & value) override;
+            
+            // Override create new sub object encoder
+            virtual std::shared_ptr<ObjectEncoder> subObjectEncoder(const std::string & name) override;
+            
+            /// \brief Write docmu
             void write(std::ostream & ostream);
-            
-            std::shared_ptr<RapidJSONEncoder> subObject(const std::string & name);
         };
     }
 }
-
-#include "RapidJSONEncoder.txx"
 
 #endif // SWARM_MAPPING_RAPIDJSONENCODER_HXX

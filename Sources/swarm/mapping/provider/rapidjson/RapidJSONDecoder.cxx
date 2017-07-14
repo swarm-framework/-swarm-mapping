@@ -15,6 +15,4 @@
  * 
  */
 
-#ifndef SWARM_MAPPING_RAPIDJSONDECODER_HXX
 #include "RapidJSONDecoder.hxx"
-#endif

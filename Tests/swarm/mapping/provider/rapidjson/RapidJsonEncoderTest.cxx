@@ -75,12 +75,12 @@ TEST_CASE("Rapid JSON encoder", "[rapidjson]") {
     
     RapidJSONEncoder rapidJSONEncoder{};
     
-    Mapping<RapidJSONEncoder, RapidJSONDecoder, RapidJSON::TestSerialization> mappingTestSerialization{};
+    Mapping<ObjectEncoder, RapidJSONDecoder, RapidJSON::TestSerialization> mappingTestSerialization{};
     
     RapidJSON::TestSerialization testSerialization{};
     
     // Create encoder provider
-    Encoder<RapidJSONEncoder> encoder {rapidJSONEncoder};
+    Encoder<ObjectEncoder> encoder {rapidJSONEncoder};
     
     // Encode object A
     mappingTestSerialization.encode(encoder, testSerialization);

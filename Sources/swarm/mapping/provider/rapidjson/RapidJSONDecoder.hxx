@@ -37,6 +37,4 @@ namespace swarm {
     }
 }
 
-#include "RapidJSONDecoder.txx"
-
 #endif // SWARM_MAPPING_RAPIDJSONDECODER_HXX
