@@ -22,7 +22,7 @@
 #include <memory>
 
 #include "../Mapping.hxx"
-#include <cxxlog/Logger.hxx>
+#include <cxx-log/Logger.hxx>
 
 namespace swarm {
     namespace mapping {

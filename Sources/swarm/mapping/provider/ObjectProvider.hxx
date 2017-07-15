@@ -20,6 +20,7 @@
 
 #include <optional>
 #include <string>
+#include <memory>
 
 namespace swarm {
     namespace mapping {
