@@ -24,13 +24,22 @@ namespace swarm {
     namespace mapping {      
         
         // Defauft constructor
-        RapidJSONDecoder::RapidJSONDecoder() : RapidJSONDecoder(std::make_shared<Document>()) {
-            
+        RapidJSONDecoder RapidJSONDecoder::get(std::istream & istream) {
+            auto document = std::make_shared<Document>();
+            IStreamWrapper isw(istream);
+            document->ParseStream(isw);
+            return RapidJSONDecoder{document};
         }
                 
         // Defauft constructor
         RapidJSONDecoder::RapidJSONDecoder(std::shared_ptr<Document> document) : document_(document) {
-            
+            if (document_->IsObject()) {
+                object_ = document_->GetObject();
+            }
+        }
+               
+        // Defauft constructor
+        RapidJSONDecoder::RapidJSONDecoder(std::shared_ptr<Document> document, Value && object) : document_(document), object_(std::move(object)) {
         }
         
         // Destructor
@@ -41,32 +50,42 @@ namespace swarm {
         // Override encode int
         std::optional<int> RapidJSONDecoder::decodeInt(const std::string & name) {
             
-            if (document_->HasMember(name.c_str())) {
-                return (*document_)[name.c_str()].GetInt64();
-            } else {
-                return std::optional<int>{};
+            if (object_.HasMember(name.c_str())) {
+                auto & value = object_[name.c_str()];
+                if (value.IsInt()) {
+                    return value.GetInt();
+                }
+                if (value.IsInt64()) {
+                    return value.GetInt64();
+                }
             }
+            
+            return std::optional<int>{};
         }
         
         // Override encode string
         std::optional<std::string> RapidJSONDecoder::decodeString(const std::string & name) {
             
-            if (document_->HasMember(name.c_str())) {
-                return (*document_)[name.c_str()].GetString();
-            } else {
-                return std::optional<std::string>{};
-            }
+            if (object_.HasMember(name.c_str())) {
+                auto & value = object_[name.c_str()];
+                if (value.IsString()) {
+                    return value.GetString();
+                }
+            } 
+            
+            return std::optional<std::string>{};
         }
         
         // Override create new sub object encoder
-        std::shared_ptr<ObjectDecoder> RapidJSONDecoder::subObjectDecoder(const std::string & name) {
-            return std::shared_ptr<ObjectDecoder>{new RapidJSONDecoder{document_}};
-        }
-        
-        /// \brief Read docmument
-        void RapidJSONDecoder::read(std::istream & istream) {
-            IStreamWrapper isw(istream);
-            document_->ParseStream(isw);
+        std::shared_ptr<DocumentDecoder> RapidJSONDecoder::subObjectDecoder(const std::string & name) {
+            if (object_.HasMember(name.c_str())) {
+                auto & value = object_[name.c_str()];
+                if (value.IsObject()) {
+                    return std::shared_ptr<DocumentDecoder>{new RapidJSONDecoder{document_, value.GetObject()}};
+                }
+            }
+            
+            return std::shared_ptr<DocumentDecoder>{};
         }
     }
 }

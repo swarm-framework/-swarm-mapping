@@ -15,9 +15,9 @@
  * 
  */
 
-#ifndef SWARM_MAPPING_OBJECTPROVIDER_HXX
-#include "ObjectProvider.hxx"
-#endif // SWARM_MAPPING_OBJECTPROVIDER_HXX
+#ifndef SWARM_MAPPING_DOCUMENTPROVIDER_HXX
+#include "DocumentProvider.hxx"
+#endif // SWARM_MAPPING_DOCUMENTPROVIDER_HXX
 
 #include <swarm/exception/SwarmException.hxx>
 
@@ -27,13 +27,13 @@ namespace swarm {
         namespace delegate {
             
             template<typename T>
-            struct ObjectProviderDelegate {
+            struct DocumentProviderDelegate {
                 
-                void encode(ObjectEncoder & objectEncoder, const std::string & name, const T & value) {
+                void encode(DocumentEncoder & documentEncoder, const std::string & name, const T & value) {
                     throw SwarmException{"Unbale to encode attribute %1%, type not implemented", name};
                 }
                 
-                std::optional<T> decode(ObjectDecoder & objectDecoder, const std::string & name) {
+                std::optional<T> decode(DocumentDecoder & documentDecoder, const std::string & name) {
                     throw SwarmException{"Unbale to decode attribute %1%, type not implemented", name};
                 }
             };
@@ -41,42 +41,42 @@ namespace swarm {
             // --- Int specialisation ---
             
             template<>
-            struct ObjectProviderDelegate<int> {
+            struct DocumentProviderDelegate<int> {
                 
-                void encode(ObjectEncoder & objectEncoder, const std::string & name, const int & value) {
-                    objectEncoder.encodeInt(name, value);
+                void encode(DocumentEncoder & documentEncoder, const std::string & name, const int & value) {
+                    documentEncoder.encodeInt(name, value);
                 }
                 
                 
-                std::optional<int> decode(ObjectDecoder & objectDecoder, const std::string & name) {
-                    return objectDecoder.decodeInt(name);
+                std::optional<int> decode(DocumentDecoder & documentDecoder, const std::string & name) {
+                    return documentDecoder.decodeInt(name);
                 }
             };
                
             // --- String specialisation ---
             
             template<>
-            struct ObjectProviderDelegate<std::string> {
+            struct DocumentProviderDelegate<std::string> {
                 
-                void encode(ObjectEncoder & objectEncoder, const std::string & name, const std::string & value) {
-                    objectEncoder.encodeString(name, value);
+                void encode(DocumentEncoder & documentEncoder, const std::string & name, const std::string & value) {
+                    documentEncoder.encodeString(name, value);
                 }
                 
                 
-                std::optional<std::string> decode(ObjectDecoder & objectDecoder, const std::string & name) {
-                    return objectDecoder.decodeString(name);
+                std::optional<std::string> decode(DocumentDecoder & documentDecoder, const std::string & name) {
+                    return documentDecoder.decodeString(name);
                 }
             };
         }
         
         template<typename T>
-        void ObjectEncoder::encode(const std::string & name, const T & value) {
-            delegate::ObjectProviderDelegate<T>{}.encode(*this, name, value);
+        void DocumentEncoder::encode(const std::string & name, const T & value) {
+            delegate::DocumentProviderDelegate<T>{}.encode(*this, name, value);
         }
         
         template<typename T>
-        std::optional<T> ObjectDecoder::decode(const std::string & name) {
-            return delegate::ObjectProviderDelegate<T>{}.decode(*this, name);
+        std::optional<T> DocumentDecoder::decode(const std::string & name) {
+            return delegate::DocumentProviderDelegate<T>{}.decode(*this, name);
         }
     }
 }

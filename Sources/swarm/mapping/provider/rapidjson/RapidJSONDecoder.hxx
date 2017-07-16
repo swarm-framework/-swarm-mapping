@@ -20,8 +20,9 @@
 
 #include <optional>
 #include <rapidjson/document.h>
+#include <istream>
 
-#include "../ObjectProvider.hxx"
+#include "../DocumentProvider.hxx"
 
 using namespace rapidjson;
 
@@ -29,21 +30,31 @@ namespace swarm {
     namespace mapping {
 
         /// \brief Class RapidJSONDecoder
-        class RapidJSONDecoder : public ObjectDecoder {
+        class RapidJSONDecoder : public DocumentDecoder {
             
         private:
             
-            // Document
+            /// \brief Document
             std::shared_ptr<Document> document_;
-                        
+            
+            // Define Json value reference
+            Value object_;
+                                    
             /// \brief Defauft constructor
             /// \param document JSONDocument
-            RapidJSONDecoder(std::shared_ptr<Document> document);
+            explicit RapidJSONDecoder(std::shared_ptr<Document> document);
+                                                
+            /// \brief Defauft constructor
+            /// \param document JSONDocument
+            /// \param value Object value
+            explicit RapidJSONDecoder(std::shared_ptr<Document> document, Value && object);
             
         public:
             
-            /// \brief Defauft constructor
-            RapidJSONDecoder();
+            /// \brief Get document form stream
+            /// \param stream
+            /// \return decoder
+            static RapidJSONDecoder get(std::istream & stream);
             
             /// \brief Destructor
             /// Used to close buffer if opened
@@ -56,10 +67,7 @@ namespace swarm {
             virtual std::optional<std::string> decodeString(const std::string & name) override;
             
             // Override create new sub object encoder
-            virtual std::shared_ptr<ObjectDecoder> subObjectDecoder(const std::string & name) override;
-            
-            /// \brief Read docmument
-            void read(std::istream & istream);
+            virtual std::shared_ptr<DocumentDecoder> subObjectDecoder(const std::string & name) override;
         };
     }
 }

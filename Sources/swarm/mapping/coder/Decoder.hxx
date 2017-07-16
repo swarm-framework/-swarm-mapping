@@ -19,6 +19,8 @@
 #define SWARM_MAPPING_DECODER_HXX
 
 #include <memory>
+#include <optional>
+#include <cxx-log/Logger.hxx>
 
 namespace swarm {
     namespace mapping {
@@ -29,15 +31,40 @@ namespace swarm {
             
         private:
             
+            /// \brief Logger
+            static const cxxlog::Logger LOGGER;
+            
             /// \brief Provider
             Provider & provider_;
             
         public:
-            Decoder(Provider & provider) : provider_(provider) {}
-
-            template <typename T>
-            std::shared_ptr<T> decode(const std::string & name);
             
+            /// \brief Decoder with provider implementation
+            /// \param provider Provider
+            Decoder(Provider & provider) : provider_(provider) {}
+            
+            // --- Attributes ---
+            
+            /// \brief Decode an attribute for a key
+            /// \param name Attribute name
+            /// \return Attribute value
+            template <typename T>
+            std::optional<T> decodeAttribute(const std::string & name);
+            
+            // --- Elements ---
+            
+            /// \brief Decode an element for a key using a mapper
+            /// \param mapper Mapper to use
+            /// \param name Attribute name
+            /// \return Attribute value
+            template <class E, typename V>
+            std::shared_ptr<V> decodeElement(Mapping<E, Provider, V> & mapper, const std::string name);
+        
+            /// \brief Decode an element for a key
+            /// \param name Attribute name
+            /// \return Attribute value
+            template <class E, typename V>
+            std::shared_ptr<V> decodeElement(const std::string name);
         };
     }
 }

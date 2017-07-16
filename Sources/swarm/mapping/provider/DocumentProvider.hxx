@@ -1,22 +1,22 @@
 /*
  * Copyright 2017 Damien Giron <contact@damiengiron.me>
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+ * 
  */
 
-#ifndef SWARM_MAPPING_OBJECTPROVIDER_HXX
-#define SWARM_MAPPING_OBJECTPROVIDER_HXX
+#ifndef SWARM_MAPPING_DOCUMENTPROVIDER_HXX
+#define SWARM_MAPPING_DOCUMENTPROVIDER_HXX
 
 #include <optional>
 #include <string>
@@ -26,7 +26,7 @@ namespace swarm {
     namespace mapping {
 
         /// \brief Class ObjectEncoder
-        struct ObjectEncoder {
+        struct DocumentEncoder {
             
             /// \brief Encode an int value
             /// \param name Attribute name
@@ -40,7 +40,7 @@ namespace swarm {
             
             /// \brief Create sub encoder for sub element
             /// \param name Element name
-            virtual std::shared_ptr<ObjectEncoder> subObjectEncoder(const std::string & name) = 0;
+            virtual std::shared_ptr<DocumentEncoder> subObjectEncoder(const std::string & name) = 0;
             
             /// \brief Encode an template value
             /// Used in mapping definition and forward to correct encode* method
@@ -49,10 +49,10 @@ namespace swarm {
             template<typename T>
             void encode(const std::string & name, const T & value);
             
-            virtual ~ObjectEncoder() {}
+            virtual ~DocumentEncoder() {}
         };
         
-        struct ObjectDecoder {
+        struct DocumentDecoder {
             
             /// \brief Decode an int value
             /// \param name Attribute name
@@ -66,7 +66,7 @@ namespace swarm {
             
             /// \brief Create sub decoder for sub element
             /// \param name Element name
-            virtual std::shared_ptr<ObjectDecoder> subObjectDecoder(const std::string & name) = 0;
+            virtual std::shared_ptr<DocumentDecoder> subObjectDecoder(const std::string & name) = 0;
             
             /// \brief Decode an template value
             /// Used in mapping definition and forward to correct decode* method
@@ -75,11 +75,11 @@ namespace swarm {
             template<typename T>
             std::optional<T> decode(const std::string & name);
             
-            virtual ~ObjectDecoder() {}
+            virtual ~DocumentDecoder() {}
         };
     }
 }
 
-#include "ObjectProvider.txx"
+#include "DocumentProvider.txx"
 
-#endif // SWARM_MAPPING_OBJECTPROVIDER_HXX
+#endif // SWARM_MAPPING_DOCUMENTPROVIDER_HXX

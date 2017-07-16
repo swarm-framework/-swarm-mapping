@@ -21,16 +21,37 @@
 
 namespace swarm {
     namespace mapping {
+
+        // --- Attributes ---
         
-        // Decode an object
+        // Decode an attribute for a key
         template <class Provider>
         template <typename T>
-        std::shared_ptr<T> Decoder<Provider>::decode(const std::string & name) {
-            
-            std::shared_ptr<T> value;
-            provider_.decode(name, value);
-            return value;
-            
+        std::optional<T> Decoder<Provider>::decodeAttribute(const std::string & name) {
+            return provider_.template decode<T>(name);
+        }
+        
+        // --- Elements ---
+        
+        // Decode an element for a key using a mapper
+        template <class Provider>
+        template <class E, typename V>
+        std::shared_ptr<V>  Decoder<Provider>::decodeElement(Mapping<E, Provider, V> & mapper, const std::string name) {
+            auto decoderProvider = provider_.subObjectDecoder(name);
+            if (decoderProvider) {
+                Decoder<Provider> decoder{*decoderProvider};
+                return mapper.decode(decoder);
+            } else {
+                return std::shared_ptr<V>{};
+            }
+        }
+        
+        // Decode an element for a key
+        template <class Provider>
+        template <class E, typename V>
+        std::shared_ptr<V>  Decoder<Provider>::decodeElement(const std::string name) {
+            Mapping<E, Provider, V> mapping{};
+            return decodeElement(mapping, name);
         }
     }
 }

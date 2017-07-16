@@ -34,17 +34,6 @@ namespace swarm {
             provider_.template encode(name, value);
         }
         
-        // Encode an attribute for a key
-        template <class Provider>
-        template <typename T>
-        void Encoder<Provider>::encodeAttribute(const std::string & name, const std::shared_ptr<const T> value) {
-            if (value) {
-                provider_.template encode(name, *value);
-            } else {
-                LOGGER.log(cxxlog::Level::FINE, "Try to encode an null value");
-            }
-        }
-        
         // --- Elements ---
         
         

@@ -53,7 +53,7 @@ namespace swarm {
             std::shared_ptr<test::ObjectA> decode(Decoder<DecoderProvider> &decoder) {
                 std::cout << "Decode A" << std::endl;
                 auto object = std::make_shared<test::ObjectA>();
-                auto r = decoder.template decode<int>("attr1");
+                auto r = decoder.template decodeAttribute<int>("attr1");
                 if (r) {
                     object->attr1 = *r;
                 }

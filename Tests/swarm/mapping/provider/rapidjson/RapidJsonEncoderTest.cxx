@@ -52,6 +52,18 @@ namespace swarm {
             virtual void encode(Encoder<EncoderProvider> & encoder, const RapidJSON::SubObject & o) override {
                 encoder.template encodeAttribute<std::string>("name", o.name);
             }
+            
+            /// \brief Decode an object
+            /// \param decoder Decoder provider
+            virtual std::shared_ptr<RapidJSON::SubObject> decode(Decoder<DecoderProvider> &decoder) override {
+                auto object = std::make_shared<RapidJSON::SubObject>();
+                auto name = decoder.template decodeAttribute<std::string>("name");
+                if (name) {
+                    object->name = name.value();
+                }
+                return object;
+            }
+            
         };
         
         template<class EncoderProvider, class DecoderProvider>
@@ -64,7 +76,24 @@ namespace swarm {
                 encoder.template encodeAttribute<int>("attr1", o.attr1);
                 
                 Mapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject>mapperA{};
-                encoder.template encodeElement(mapperA, "subObjectName", o.subObject1);
+                encoder.template encodeElement(mapperA, "subObject1", o.subObject1);
+            }
+                        
+            /// \brief Decode an object
+            /// \param decoder Decoder provider
+            virtual std::shared_ptr<RapidJSON::TestSerialization> decode(Decoder<DecoderProvider> &decoder) override {
+                auto object = std::make_shared<RapidJSON::TestSerialization>();
+                auto attr1 = decoder.template decodeAttribute<int>("attr1");
+                if (attr1) {
+                    object->attr1 = attr1.value();
+                }
+                
+                Mapping<EncoderProvider, DecoderProvider, RapidJSON::SubObject>mapperA{};
+                std::shared_ptr<RapidJSON::SubObject> subObject = decoder.template decodeElement(mapperA, "subObject1");
+                if (subObject) {
+                    object->subObject1 = *subObject;
+                }
+                return object;
             }
         };
     }
@@ -73,14 +102,21 @@ namespace swarm {
 
 TEST_CASE("Rapid JSON encoder", "[rapidjson]") {
     
-    RapidJSONEncoder rapidJSONEncoder{};
-    
-    Mapping<ObjectEncoder, RapidJSONDecoder, RapidJSON::TestSerialization> mappingTestSerialization{};
-    
     RapidJSON::TestSerialization testSerialization{};
     
-    // Create encoder provider
-    Encoder<ObjectEncoder> encoder {rapidJSONEncoder};
+    testSerialization.attr1 = 15;
+    testSerialization.subObject1.name = "testName";
+    
+    // --- Mapper ---
+    
+    Mapping<DocumentEncoder, DocumentDecoder, RapidJSON::TestSerialization> mappingTestSerialization{};
+    
+    // --- Encode ---
+    
+    RapidJSONEncoder rapidJSONEncoder{};
+    
+    // Create coder provider
+    Encoder<DocumentEncoder> encoder {rapidJSONEncoder};
     
     // Encode object A
     mappingTestSerialization.encode(encoder, testSerialization);
@@ -90,4 +126,17 @@ TEST_CASE("Rapid JSON encoder", "[rapidjson]") {
     rapidJSONEncoder.write(ss);
     
     std::cout << ss.str() << std::endl;
+    
+    // --- Decode ---
+
+    RapidJSONDecoder rapidJSONDecoder = RapidJSONDecoder::get(ss);
+    
+    Decoder<DocumentDecoder> decoder {rapidJSONDecoder};
+    
+    auto decoded = mappingTestSerialization.decode(decoder);
+    
+    REQUIRE(decoded);
+    
+    REQUIRE(decoded->attr1 == 15);
+    REQUIRE(decoded->subObject1.name == "testName");
 }

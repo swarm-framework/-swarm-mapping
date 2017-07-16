@@ -20,6 +20,7 @@
 
 #include <string>
 #include <memory>
+#include <optional>
 #include <iostream>
 
 namespace swarm {
@@ -38,8 +39,9 @@ namespace swarm {
         
         struct SampleDecoder {
             
-            void decode(const std::string & name, std::shared_ptr<int> & value) {
-                value.reset(new int {10});
+            template<typename T>
+            std::optional<T> decode(const std::string & name) {
+                return 10;
             }
         };
     }
