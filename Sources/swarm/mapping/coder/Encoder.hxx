@@ -53,13 +53,6 @@ namespace swarm {
             template <typename T>
             void encodeAttribute(const std::string & name, const T & value);
             
-            
-            /// \brief Encode an attribute for a key
-            /// \param name Attribute name
-            /// \param value Attribute value
-            template <typename T>
-            void encodeAttribute(const std::string & name, const std::shared_ptr<const T> value);
-            
             // --- Elements ---
             
             /// \brief Encode an element for a key using a mapper
