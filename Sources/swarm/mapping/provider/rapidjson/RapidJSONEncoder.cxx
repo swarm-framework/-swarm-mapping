@@ -52,9 +52,9 @@ namespace swarm {
             writer->String(value.c_str());
         }
 
-        std::shared_ptr<ObjectEncoder> RapidJSONEncoder::subObjectEncoder(const std::string &name) {
+        std::shared_ptr<DocumentEncoder> RapidJSONEncoder::subObjectEncoder(const std::string &name) {
             writer->Key(name.c_str());
-            return std::shared_ptr<ObjectEncoder>{new RapidJSONEncoder{stringBuffer, writer}};
+            return std::shared_ptr<DocumentEncoder>{new RapidJSONEncoder{stringBuffer, writer}};
         }
 
         void RapidJSONEncoder::write(std::ostream &ostream) {

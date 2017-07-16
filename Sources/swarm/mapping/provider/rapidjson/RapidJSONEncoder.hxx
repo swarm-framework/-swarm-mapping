@@ -24,7 +24,7 @@
 #include <memory>
 #include <string>
 
-#include "../ObjectProvider.hxx"
+#include "../DocumentProvider.hxx"
 
 using namespace rapidjson;
 
@@ -32,7 +32,7 @@ namespace swarm {
     namespace mapping {
                 
         /// \brief Class RapidJSONEncoder
-        class RapidJSONEncoder : public ObjectEncoder {
+        class RapidJSONEncoder : public DocumentEncoder {
             
         private:
             
@@ -67,7 +67,7 @@ namespace swarm {
             virtual void encodeString(const std::string & name, const std::string & value) override;
             
             // Override create new sub object encoder
-            virtual std::shared_ptr<ObjectEncoder> subObjectEncoder(const std::string & name) override;
+            virtual std::shared_ptr<DocumentEncoder> subObjectEncoder(const std::string & name) override;
             
             /// \brief Write docmu
             void write(std::ostream & ostream);

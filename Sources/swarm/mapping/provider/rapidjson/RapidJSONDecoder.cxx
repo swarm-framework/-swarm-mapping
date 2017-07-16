@@ -77,15 +77,15 @@ namespace swarm {
         }
         
         // Override create new sub object encoder
-        std::shared_ptr<ObjectDecoder> RapidJSONDecoder::subObjectDecoder(const std::string & name) {
+        std::shared_ptr<DocumentDecoder> RapidJSONDecoder::subObjectDecoder(const std::string & name) {
             if (object_.HasMember(name.c_str())) {
                 auto & value = object_[name.c_str()];
                 if (value.IsObject()) {
-                    return std::shared_ptr<ObjectDecoder>{new RapidJSONDecoder{document_, value.GetObject()}};
+                    return std::shared_ptr<DocumentDecoder>{new RapidJSONDecoder{document_, value.GetObject()}};
                 }
             }
             
-            return std::shared_ptr<ObjectDecoder>{};
+            return std::shared_ptr<DocumentDecoder>{};
         }
     }
 }

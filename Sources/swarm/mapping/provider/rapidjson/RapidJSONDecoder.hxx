@@ -22,7 +22,7 @@
 #include <rapidjson/document.h>
 #include <istream>
 
-#include "../ObjectProvider.hxx"
+#include "../DocumentProvider.hxx"
 
 using namespace rapidjson;
 
@@ -30,7 +30,7 @@ namespace swarm {
     namespace mapping {
 
         /// \brief Class RapidJSONDecoder
-        class RapidJSONDecoder : public ObjectDecoder {
+        class RapidJSONDecoder : public DocumentDecoder {
             
         private:
             
@@ -67,7 +67,7 @@ namespace swarm {
             virtual std::optional<std::string> decodeString(const std::string & name) override;
             
             // Override create new sub object encoder
-            virtual std::shared_ptr<ObjectDecoder> subObjectDecoder(const std::string & name) override;
+            virtual std::shared_ptr<DocumentDecoder> subObjectDecoder(const std::string & name) override;
         };
     }
 }
