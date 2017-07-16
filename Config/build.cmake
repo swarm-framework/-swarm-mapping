@@ -1,60 +1,39 @@
-
-# Include sub projects
-find_dependencies(cxx-log)
-find_dependencies(swarm-commons)
-
-find_package(RapidJSON QUIET)
-
-# Create targets
-add_library(swarm-mapping
-
-    Sources/swarm/mapping/coder/Encoder.hxx Sources/swarm/mapping/coder/Encoder.txx 
-    Sources/swarm/mapping/coder/Decoder.hxx Sources/swarm/mapping/coder/Decoder.txx
-    
-    Sources/swarm/mapping/Mapping.cxx  Sources/swarm/mapping/Mapping.hxx Sources/swarm/mapping/Mapping.txx
-)
-
-# Test RapidJSON
-if(DEFINED RapidJSON_DIR)
-    message(STATUS "Build RapidJSON mapping with ${RapidJSON_DIR}")
-    target_sources(swarm-mapping
-    
-        PRIVATE
-        
-            Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONEncoder.txx
-            Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.hxx Sources/swarm/mapping/provider/rapidjson/RapidJSONDecoder.txx
-    )
-    
-else()
-    message(STATUS "Unable to find RapidJSON, mapping disabled")
-endif()
-
-# Properties of targets
-
-# Add definitions for targets
-# Values:
-#   * Debug: -DSWARM_MAPPING_DEBUG=1
-#   * Release: -DSWARM_MAPPING_DEBUG=0
-#   * other: -DSWARM_MAPPING_DEBUG=0
-target_compile_definitions(swarm-mapping  PUBLIC "SWARM_MAPPING_DEBUG=$<CONFIG:Debug>")
-
 # Generate headers:
 include(GenerateExportHeader)
-generate_export_header(swarm-mapping)
+generate_export_header(${PROJECT_NAME})
+
+# Create test coverage target (gcov)
+if (CMAKE_BUILD_TYPE STREQUAL "Coverage")
+    message("-- Activate Coverage for ${PROJECT_NAME}")
+	set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
+	set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+
+endif()
 
 # Global includes. Used by all targets
+# Note:
+#   * header location in project: Foo/Source/foo/Bar.hpp
+#   * header can be included by C++ code `#include <foo/Bar.hpp>`
+#   * header location in project: ${CMAKE_CURRENT_BINARY_DIR}/bar_export.hpp
+#   * header can be included by: `#include <bar_export.hpp>`
 target_include_directories(
-    swarm-mapping 
+    ${PROJECT_NAME} 
     
     PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Sources>"
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-        
-    PRIVATE
-        ${cxx-log_INCLUDE_DIR}
-        ${swarm-commons_INCLUDE_DIR}
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/Sources>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+
 )
 
+####
+# Installation (https://github.com/forexample/package-example)
+
+# Layout. This works for all platforms:
+#   * <prefix>/lib/cmake/<PROJECT-NAME>
+#   * <prefix>/lib/
+#   * <prefix>/include/
 set(config_install_dir "lib/cmake/${PROJECT_NAME}")
 set(include_install_dir "include")
 
@@ -86,11 +65,9 @@ configure_package_config_file(
 )
 
 # Targets:
-#   * <prefix>/lib/${target}.a
-#   * header location after install: <prefix>/include/*.hxx
-#   * headers can be included by C++ code `#include <project/*.hxx>`
+#   * <prefix>/lib/${PROJECT_NAME}.a
 install(
-    TARGETS swarm-mapping
+    TARGETS ${PROJECT_NAME}
     EXPORT "${targets_export_name}"
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
@@ -99,30 +76,26 @@ install(
 )
 
 # Headers:
-#   * Sources/${target}/*.hxx -> <prefix>/include/${target}/*.hxx
 install(
-    DIRECTORY "Sources/swarm"
+    DIRECTORY "Sources/${PROJECT_NAME}"
     DESTINATION "${include_install_dir}"
-    FILES_MATCHING PATTERN "*.[h;t]xx"
+    FILES_MATCHING PATTERN "*.hxx"
 )
 
 # Export headers:
-#   * ${CMAKE_CURRENT_BINARY_DIR}/${target}_export.h -> <prefix>/include/${target}_export.h
 install(
     FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/swarm-mapping_export.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_export.h"
     DESTINATION "${include_install_dir}"
 )
 
 # Config
-#   * <prefix>/lib/cmake/${project}/${Target}Config.cmake
 install(
     FILES "${project_config}" "${version_config}"
     DESTINATION "${config_install_dir}"
 )
 
 # Config
-#   * <prefix>/lib/cmake/${project}/${Target}Targets.cmake
 install(
     EXPORT "${targets_export_name}"
     NAMESPACE "${namespace}"

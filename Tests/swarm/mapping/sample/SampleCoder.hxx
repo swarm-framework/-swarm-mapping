@@ -31,7 +31,7 @@ namespace swarm {
                 std::cout << "Encode " << name << " as int" << std::endl;
             }
             
-            std::shared_ptr<SampleEncoder> subObject(const std::string & name) {
+            std::shared_ptr<SampleEncoder> subObjectEncoder(const std::string & name) {
                 return std::shared_ptr<SampleEncoder>();
             }
         };
